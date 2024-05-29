@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { toast } from "react-hot-toast";
+import { Image } from "../types/Image";
 
-const useImageFetcher = (searchText, page) => {
-  const [images, setImages] = useState([]);
+interface ImageResponse {
+  total: number;
+  total_pages: number;
+  results: Image[];
+}
+
+const useImageFetcher = (searchText: string, page: number) => {
+  const [images, setImages] = useState<Image[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -21,10 +28,10 @@ const useImageFetcher = (searchText, page) => {
     }
   }, [page]);
 
-  const fetchImages = async (query, page) => {
+  const fetchImages = async (query: string, page: number) => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
+      const response: AxiosResponse<ImageResponse> = await axios.get(
         `https://api.unsplash.com/search/photos?query=${query}&per_page=12&page=${page}`,
         {
           headers: {
@@ -47,10 +54,14 @@ const useImageFetcher = (searchText, page) => {
       setIsLoading(false);
     } catch (error) {
       console.error("Error:", error);
-      if (error.response && error.response.status === 404) {
-        toast("No more images to load.");
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          toast("No more images to load.");
+        } else {
+          toast.error("Failed to load images. Please try again.");
+        }
       } else {
-        toast.error("Failed to load images. Please try again.");
+        toast.error("An unexpected error occurred. Please try again.");
       }
       setIsLoading(false);
     }

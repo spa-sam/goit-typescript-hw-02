@@ -6,13 +6,14 @@ import ImageModal from "../ImageModal/ImageModal";
 import useImageFetcher from "../../hooks/useImageFetcher";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import Loader from "../Loader/Loader";
+import { Image } from "../../types/Image";
 
 function App() {
-  const [searchText, setSearchText] = useState("");
-  const [page, setPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [prevLoading, setPrevLoading] = useState(false);
+  const [searchText, setSearchText] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [prevLoading, setPrevLoading] = useState<boolean>(false);
 
   const { images, isLoading, hasMore } = useImageFetcher(searchText, page);
 
@@ -20,7 +21,7 @@ function App() {
     Modal.setAppElement("#root");
   }, []);
 
-  const handleSearchSubmit = useCallback((text) => {
+  const handleSearchSubmit = useCallback((text: string) => {
     setSearchText(text);
     setPage(1);
   }, []);
@@ -29,7 +30,7 @@ function App() {
     setPage((prevPage) => prevPage + 1);
   }, []);
 
-  const openModal = useCallback((image) => {
+  const openModal = useCallback((image: Image) => {
     setIsModalOpen(true);
     setSelectedImage(image);
   }, []);

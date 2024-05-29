@@ -1,13 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import css from "./SearchBar.module.css";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import { SearchBarProps } from "./SearchBar.types";
 
-function SearchBar({ onSubmit }) {
+const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
   const [searchText, setSearchText] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
     if (searchText.trim() === "") {
@@ -18,7 +19,7 @@ function SearchBar({ onSubmit }) {
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
     setError(null);
   };
@@ -58,6 +59,6 @@ function SearchBar({ onSubmit }) {
       <ErrorMessage message={error} />
     </>
   );
-}
+};
 
 export default SearchBar;
