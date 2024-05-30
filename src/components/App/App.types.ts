@@ -1,3 +1,5 @@
+import { Image } from "../../types/Image";
+
 export interface AppProps {}
 export interface AppState {
   searchText: string;
